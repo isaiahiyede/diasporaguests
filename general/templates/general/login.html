@@ -1,0 +1,87 @@
+{% extends 'general/bookRoom.html' %}
+{% load staticfiles %}
+
+
+{% block contents %}
+ 
+<section id="about" >
+    <div class="container">
+        <div class="row"> 
+            <div class="col-md-12">
+                <div class="about-logo">
+                    <p>Please sign in here</p>
+                    <p>Dont have an account with us? Please sign up <a href="{% url 'general:userregister' %}"> HERE </a> to enjoy many benefits we have to offer to our registered clients</p>
+                    <p></p>
+                    <p>NB: Fields with<b style="color:red">'*'</b> are required</p>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+                           <!-- Form itself -->
+        <form action="{% url 'general:login' %}" method="POST">
+          {% csrf_token %}
+           <h3>Sign in form</h3>
+
+           {% if not email_not_found %}
+            <div class="control-group">
+                <div class="controls">
+                <p class="">e-mail/Phone Number</p>
+                <input type="text" class="form-control" 
+                        id="email" name="email" required
+                           data-validation-required-message="Please enter your phone number or email" />
+               </div>
+             </div><br/>
+            {% else %}         
+             <div class="control-group">
+                <div class="controls">
+                <p class="">e-mail/Phone Number</p>
+                <input type="text" class="form-control" 
+                        id="email" name="email" required value="{{email}}"
+                           data-validation-required-message="Please enter your phone number or email" />
+                  {% if email_not_found %}         
+                    <p class="help-block" style="color:red;">Email/Phone number does not exist</p>
+                  {% endif %}
+               </div>
+             </div> <br/>
+             {% endif %}
+
+              <div class="control-group">
+                  <div class="controls">
+                    <p class="">Password</p>
+                    <input type="password" class="form-control" 
+                            id="password" name="password" required
+                       data-validation-required-message="Please enter your password" />
+                        {% if no_record_found %}
+                            <p class="help-block" style="color:red;">Oops something is wrong with either the email/phone number and password combination entered</p>
+                        {% endif %}
+                </div>
+            </div><br/>      
+
+            <div id="success"> </div> <!-- For success/fail messages -->
+            <button type="submit" class="btn btn-primary pull-right">Submit</button><br />
+        </form>
+<!--           <a href="/resetpassword/">Forgot password</a>
+ -->
+            </div>
+            <div class="col-md-6">
+            </div>
+        </div>
+    </div>
+</section><!--/#about-->
+<section id="hero-action-section" class="hero-action-section">
+    <!-- .Container -->
+    <div class="container ow-section">
+        <h3 class="hero-action-subtitle">Our services are top class</h3>
+        <h4 class="hero-action-title">Guaranteed to get value for your money</h4>
+        <p class="hero-action-description">So what are you waiting for....
+        </p>
+        <p><a href="#/pricing" class="get-started" style="width:250px;">Make a reservation Now!!!</a></p>
+    </div><!-- /.Container -->
+</section>
+
+{% endblock contents %}
+

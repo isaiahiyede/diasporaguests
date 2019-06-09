@@ -1,0 +1,52 @@
+{% extends 'general/bookRoom.html' %}
+{% load staticfiles %}
+
+
+{% block contents %}
+ 
+<section id="about" >
+    <div class="container">
+        <div class="row"> 
+            <div class="col-md-12">
+                <div class="about-logo">
+
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-6">
+            	{% if message %}
+            		<p>Not found</p>
+            	{% else %}
+	               	<p>Booking Number: {{reservation.tracking_number}}</p>
+			        <p>Room Type: {{reservation.room_type}}</p>
+			        <p>Room Number: {{reservation.room_number}}</p>
+			        <p>Check in Date: {{reservation.checK_in}}</p>
+			        <p>Check out Date: {{reservation.checK_out}}</p>
+			        <p>Number of Days: {{reservation.days}}</p>
+			        <p>Amount: ₦{{reservation.amount_paid}}</p>
+			        <p>Payment Reference Number: {{reservation.ref_num}}</p>
+			        <p>Status: {{reservation.status}}</p> 
+			    {% endif %}           <!-- Form itself -->
+            </div>
+            <div class="col-md-6">
+            </div>
+        </div>
+    </div>
+</section><!--/#about-->
+<section id="hero-action-section" class="hero-action-section">
+    <!-- .Container -->
+    <div class="container ow-section">
+        <h3 class="hero-action-subtitle">Our services are top class</h3>
+        <h4 class="hero-action-title">Guaranteed to get value for your money</h4>
+        <p class="hero-action-description">So what are you waiting for....
+        </p>
+        <p><a href="#/pricing" class="get-started" style="width:250px;">Make a reservation Now!!!</a></p>
+    </div><!-- /.Container -->
+</section>
+
+{% endblock contents %}
+

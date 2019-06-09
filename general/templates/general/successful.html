@@ -1,0 +1,34 @@
+{% extends 'general/bookRoom.html' %}
+{% load staticfiles %}
+
+
+{% block contents %}
+ 
+<section id="about" style="position: relative;top: 50px;" >
+    <div class="container">
+        <div class="row"> 
+            <div class="col-md-12">
+                <div class="about-logo">
+                    <div class="about-text">
+                      <h1>Welcome!!!</h1><br>
+                      <p style="position: relative; bottom: 30px;">Your registration was successful. Please follow this <a href="{% url 'general:login' %}"> LINK </a> and login to start making your reservations</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!--/#about-->
+<section id="hero-action-section" class="hero-action-section">
+    <!-- .Container -->
+    <div class="container ow-section">
+        <h3 class="hero-action-subtitle">Our services are top class</h3>
+        <h4 class="hero-action-title">Guaranteed to get value for your money</h4>
+        <p class="hero-action-description">So what are you waiting for....
+        </p>
+        <p><a href="#/pricing" class="get-started" style="width:250px;">Make a reservation Now!!!</a></p>
+    </div><!-- /.Container -->
+</section>
+
+{% endblock contents %}
+

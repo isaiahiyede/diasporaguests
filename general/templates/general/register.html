@@ -1,0 +1,179 @@
+{% extends 'general/bookRoom.html' %}
+{% load staticfiles %}
+
+
+{% block contents %}
+ 
+<section id="about">
+    <div class="container">
+            <div class="row"> 
+                <div class="col-md-12">
+                    <div class="about-logo">
+                        <p>Hi,</p>
+                        <p>Please sign up here and enjoy the many benefits of being our guest<b style="color:red;"></b></p>
+                        <p>NB: Fields with<b style="color:red">'*'</b> are required</p>
+                        <p>Already signed up please click <a href="{% url 'general:login' %}"> HERE </a>to login in</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-6">                         
+                    <!-- Form itself -->
+                    <form action="{% url 'general:userregister' %}" method="POST">
+                    {% csrf_token %}
+
+                   <h3>Sign Up form</h3>
+
+                    <div class="control-group">
+                        <div class="controls">
+                        <p class="">First name</p>
+                            {{user_form.first_name}}
+                          <p class="help-block"></p>
+                       </div>
+                     </div>
+                    
+
+                     <div class="control-group">
+                        {% if not username_is_taken %}
+                         <div class="controls">
+                            <p class="">Username</p>
+                            {{user_form.username}}
+                            <p class="help-block"></p>
+                        </div>
+                        {% else %}
+                         <div class="controls">
+                            <p class="">Username</p>
+                            {{user_form.username}}
+                             <p class="help-block" style="color:red">Username already exist</p>
+                          </div>
+                        {% endif %}
+                     </div> 
+
+                     <div class="control-group">
+                        {% if not email_is_taken %}
+                          <div class="controls">
+                            <p class="">E-mail</p>
+                            {{user_form.email}}
+                          </div>
+                        {% else %}
+                        <div class="controls">
+                            <p class="">E-mail</p>
+                            {{user_form.email}}
+                            <p class="help-block" style="color:red">E-mail already taken</p>
+                        </div>
+                        {% endif %}
+                    </div> 
+
+                    <div class="control-group">
+                        {% if not phone_is_taken %}
+                        <div class="controls">
+                            <p class="">Phone Number</p>
+                            {{user_account_form.phone_number}}         
+                            <p class="help-block"></p>
+                        </div>
+                        {% else %}
+                          <div class="controls">
+                            <p class="">Phone Number</p>
+                            {{user_account_form.phone_number}}
+                            <p class="help-block" style="color:red">Phone Number already exists</p>
+                         </div>
+                        {% endif %}
+
+                    </div>
+
+                    {% if password_mismatch %} 
+
+                        <div class="control-group">
+                              <div class="controls">
+                                <p class="">Password</p>
+                                <input type="password" class="form-control" 
+                                        id="password" name="password" required
+                                   data-validation-required-message="Please enter your password" />
+                                <p class="help-block"></p>
+                            </div>
+                        </div> 
+
+                        <div class="control-group">
+                              <div class="controls">
+                                <p class="">Confirm password</p>
+                                <input type="password" class="form-control"
+                                        id="confirm_password" name="confirm_password" required
+                                   data-validation-required-message="Please confirm your password" />
+                                <p class="help-block" style="color:red">Sorry passwords do not match</p>
+
+                            </div>
+                        </div>
+
+                    {% elif password_too_short %}
+
+                        <div class="control-group">
+                              <div class="controls">
+                                <p class="">Passowrd</p>
+                                <input type="password" class="form-control" 
+                                        id="password" name="password" required
+                                   data-validation-required-message="Please enter your password" />
+                                <p class="help-block"></p>
+                            </div>
+                        </div> 
+
+                        <div class="control-group">
+                              <div class="controls">
+                                <p class="">Confirm password</p>
+                                <input type="password" class="form-control"
+                                        id="confirm_password" name="confirm_password" required
+                                   data-validation-required-message="Please confirm your password" />
+                                <p class="help-block" style="color:red">Password to short(Passwords should be at least six characters long)</p>
+
+                            </div>
+                        </div>
+
+                    {% else %}
+
+                        <div class="control-group">
+                              <div class="controls">
+                                <p class="">Password</p>
+                                <input type="password" class="form-control" 
+                                        id="password" name="password" required
+                                   data-validation-required-message="Please enter your password" />
+                                <p class="help-block"></p>
+                            </div>
+                        </div> 
+
+                        <div class="control-group">
+                              <div class="controls">
+                                <p class="">Confirm password</p>
+                                <input type="password" class="form-control"
+                                        id="confirm_password" name="confirm_password" required
+                                   data-validation-required-message="Please confirm your password" />
+                                <p class="help-block"></p>
+
+                            </div>
+                        </div>
+
+                    {% endif %}
+ 
+                    <div id="success"> </div> <!-- For success/fail messages -->
+                    <button type="submit" class="btn btn-primary pull-right">Submit</button><br />
+                    </form>
+                    <!-- endform -->
+                </div>
+                <div class="col-md-6">
+                </div>
+            </div>
+        </div>
+</section>
+<section id="hero-action-section" class="hero-action-section">
+    <!-- .Container -->
+    <div class="container ow-section">
+        <h3 class="hero-action-subtitle">Our services are top class</h3>
+        <h4 class="hero-action-title">Guaranteed to get value for your money</h4>
+        <p class="hero-action-description">So what are you waiting for....
+        </p>
+        <p><a href="#/pricing" class="get-started" style="width:250px;">Make a reservation Now!!!</a></p>
+    </div><!-- /.Container -->
+</section>
+
+{% endblock contents %}
+

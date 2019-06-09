@@ -1,0 +1,329 @@
+{% load staticfiles %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="webthemez">
+    <title>Diaspora Suites and Events Garden</title>
+	<!-- core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/animate.min.css' %}" rel="stylesheet"> 
+    <link href="{% static 'css/prettyPhoto.css' %}" rel="stylesheet">
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/slider-style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/slider-custom.css' %}" />
+	<script type="text/javascript" src="{% static 'js/modernizr.custom.79639.js' %}"></script>
+    
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->       
+    <link rel="shortcut icon" href="{% static 'images/ico/homeicon.jpg' %}"> 
+</head> 
+
+<body id="home">
+<header id="header">
+    <nav id="main-nav" class="navbar navbar-default navbar-fixed-top" role="banner">
+        <div class="container">
+        <style>
+            
+            .navbar.navbar-default .navbar-brand {
+                height: auto;
+                padding: 30px 15px 1px;
+                color: yellow;
+                font-size: 30px;
+
+        </style>
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Diaspora Suites</a>&nbsp;<br>
+                <span style="color: white !important;">Relax in Comfort and Style .............</span><br>
+
+            </div>
+			
+            <div class="collapse navbar-collapse navbar-right">
+                <ul class="nav navbar-nav">
+                	{% if request.user.is_authenticated %}
+                        <li class="scroll"><a href="{% url 'client:client_page' %}">Hi, {{request.user.username}}</a></li>
+                    {% endif %}
+                    <li class="scroll"><a href="/">Home</a></li>  
+                    <li class="scroll"><a href="/#services">Services</a></li>
+                    <li class="scroll"><a href="/#about">About</a></li> 
+<!--                         <li class="scroll"><a href="#our-team">Our Team</a></li>
+-->						<li class="scroll"><a href="/#portfolio">Portfolio</a></li>
+                    <li class="scroll"><a href="/#pricing">Pricing</a></li>
+                    <li class="scroll"><a href="/#contact-us">Contact</a></li> 
+                    {% if request.user.is_authenticated %}
+                        <li class="scroll"><a href="{% url 'general:user_logout' %}">Logout</a></li>
+                    {% else %}
+                        <li class="scroll"><a href="{% url 'general:login' %}">Login</a></li>
+                    {% endif %} 
+
+                     <li>
+                        <form class="navbar-form" style="margin-top: 30px !important;" role="search" method="POST" action="{% url 'backend:search' %}">
+                            {% csrf_token %}
+                            <div class="input-group" style="background-color: #F6CC07;">
+                                <input type="text" style="background-color: #F6CC07;" class="form-control" required placeholder="Search" name="srch-term" id="srch-term">
+                                <div class="input-group-btn">
+                                    <button style="background-color: #F6CC07;" class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </li>
+
+                </ul>
+
+
+            		<h4>
+                        </style>
+
+                        {% for msg in messages %}
+                            <script>
+                                function show_alert(){
+                                var alert = '<p class="text-{{ msg.tags }}" style="right: 150px; position: relative;">{{ msg }}</p>';
+                                document.write(alert);
+                                }
+                                display = window.setTimeout(show_alert(), 1000);
+                                window.clearTimeout(display);
+                            </script>
+                        {% endfor %}
+                        
+                    </h4>
+            </div>
+        </div><!--/.container-->
+    </nav><!--/nav-->
+</header><!--/header-->
+
+
+{% block contents %}
+  
+
+<section id="pricing">
+    <div class="container">
+
+        <div class="section-header">
+            <h2 class="section-title wow fadeInDown">Pricing</h2>
+            <p class="wow fadeInDown">Check out the range of our competitive prices for our top class Rooms.</p>
+        </div>
+
+        <div class="row">
+            
+            <div class="col-md-5 col-sm-6 col-xs-12">
+                <div class="wow zoomIn" data-wow-duration="400ms" data-wow-delay="0ms">
+                  	<form action="{% url 'general:create_booking' %}" method="POST">
+          				{% csrf_token %}
+
+			            <div class="control-group">
+			                <div class="controls">
+				                <p class="">Check in date: </p>
+				                <input type="text" name="from" id="from_dt" required class="form-control">
+			               </div>
+			             </div>
+
+                         <input type="hidden" name="room_type_id" value="{{room_type.id}}">
+                         <input type="hidden" name="room_cost" id="room_cost" value="{{room_type.room_price_1}}">
+       
+			             <div class="control-group">
+			                <div class="controls">
+				                <p class="">Check out date: </p>
+				                <input type="text" name="to" required id="to_dt" class="form-control">
+			               </div>
+			             </div>
+
+                         <div class="control-group">
+                            <div class="controls">
+                                <p class="">Lodge</p>
+                                <select id="room_number_selected" name="room_number" required class="form-control">
+                                    <option value="">Select Logde</option>
+                                    {% for room_number in room_numbers %}
+                                    <option value="{{room_number.id}}">{{room_number.room_number}}</option>
+                                    {% endfor %}
+                                </select>
+                           </div>
+                         </div>
+
+                         <div class="control-group">
+                            <div class="controls">
+                                <p class="">Number of Days</p>
+                                <input type="text" name="nod" id="nod" readonly class="form-control">
+                           </div>
+                         </div>
+
+                         <div class="control-group">
+                            <div class="controls">
+                                <p class="">Amount Due (₦)</p>
+                                <input type="text" name="amount" id="amount" readonly class="form-control">
+                           </div>
+                         </div>
+
+			             <div class="control-group">
+			                <div class="controls">
+				                <p class="">Payment Ref Number and Name:</p>
+				                <input type="text" class="form-control" id="pay_ref" name="pay_ref" required/>
+			               </div>
+			               <p class="wow fadeInDown">Please make payment to our account (A/c No: 1015267354, A/c Name: DIASPORASUITES AND EVENTS GARDEN LIMITED, ZENITH BANK NIG LTD) and enter the teller Number/Reference code.</p>
+			             </div>
+
+			             <!-- <div class="control-group">
+			                <div class="controls">
+				                <p class="">Online Payment</p>
+				                <script src="https://js.paystack.co/v1/inline.js"></script>
+  								<button type="button" class="form-control" style="background-color: #3bb75e;
+    								border-color: #3bb75e" onclick="payWithPaystack()"> Pay </button>
+			               </div>
+			               <p class="wow fadeInDown">Coming soon ........</p>
+			             </div> -->
+			            <div id="success"> </div> <!-- For success/fail messages -->
+                        <button type="button" disabled class="btn btn-primary" style="background-color: #009cde;
+                                    border-color: #009cde; width: 150px; border-radius: 4px" onclick="payWithPaystack()"> Pay Online</button>
+			            <button type="submit" onclick="return checkRoom()" class="btn btn-primary pull-right" style="border-radius: 4px; width: 150px;">Submit</button><br />
+        			</form>    
+                </div>
+            </div>
+
+			<div class="col-md-2 col-sm-6 col-xs-12">
+                <div class="wow zoomIn" data-wow-duration="400ms" data-wow-delay="0ms">
+                  	  
+                </div>
+            </div>
+
+            <div class="col-md-5 col-sm-6 col-xs-12">
+                <div class="wow zoomIn" data-wow-duration="400ms" data-wow-delay="0ms">
+                    <ul class="pricing">
+                        <li class="plan-header">
+                            <div class="price-duration">
+                                <span class="price">
+                                    ₦&nbsp;{{room_type.room_price_1}}/day
+                                </span>
+                                <span class="duration">
+                                    {{room_type.days_of_week}}
+                                </span>
+                            </div>
+
+                            <div class="plan-name">
+                                {{room_type.room_type}}
+                            </div>
+                        </li>
+                        <li>{{room_type.room_service1}}</li>
+                        <li>{{room_type.room_service2}}</li>
+                        <li>{{room_type.room_service3}}</li>
+                        <li>{{room_type.room_service4}}</li>
+                        <li class="plan-purchase"><a class="btn btn-primary" href="">Book Now!!!</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section><!--/#pricing-->
+
+{% endblock contents %}
+
+<footer id="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                &copy; 2015 Company Name. Template by <a target="_blank" href="http://webthemez.com/" title="Free Bootstrap Themes and HTML Templates">WebThemez.com</a>
+            </div>
+            <div class="col-sm-6">
+                <!-- <ul class="social-icons">
+                    <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                    <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                    <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                    <li><a href="#"><i class="fa fa-linkedin"></i></a></li> 
+                    <li><a href="#"><i class="fa fa-youtube"></i></a></li>
+                    <li><a href="#"><i class="fa fa-github"></i></a></li>
+                </ul> -->
+            </div>
+        </div>
+    </div>
+</footer><!--/#footer-->
+
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script> 
+    <script src="{% static 'js/mousescroll.js' %}"></script>
+    <script src="{% static 'js/smoothscroll.js' %}"></script>
+    <script src="{% static 'js/jquery.prettyPhoto.js' %}"></script>
+    <script src="{% static 'js/jquery.isotope.min.js' %}"></script>
+    <script src="{% static 'js/jquery.inview.min.js' %}"></script>
+    <script src="{% static 'js/wow.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/jquery.ba-cond.min.js' %}"></script>
+    <script src="{% static 'js/custom-scripts.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+
+        $("document").ready(function() {
+          
+            $("#from_dt").datepicker({
+                minDate: 0,
+                maxDate: '+1Y+6M',
+                onSelect: function (dateStr) {
+                    var min = $(this).datepicker('getDate'); // Get selected date
+                    $("#to_dt").datepicker('option', 'minDate', min || '0'); // Set other min, default to today
+                }
+            });
+
+
+            $("#to_dt").datepicker({
+                minDate: '0',
+                maxDate: '+1Y+6M',
+                onSelect: function (dateStr) {
+                    var max = $(this).datepicker('getDate'); // Get selected date
+                    $('#datepicker').datepicker('option', 'maxDate', max || '+1Y+6M'); // Set other max, default to +18 months
+
+                    var start = $("#from_dt").datepicker("getDate");
+                    var end = $("#to_dt").datepicker("getDate");
+                    var days = (end - start) / (1000 * 60 * 60 * 24);
+                    $("#nod").val(days);
+                    var no_of_day = $("#nod").val(days);
+                    var cost_per_day = $('#room_cost').val()
+                    $('#amount').val($('#room_cost').val() * days);
+                    }
+                });
+            });
+
+
+            $('body').on('click', '#pay_ref', function(){
+
+                var start = $("#from_dt").datepicker("getDate");
+                var end = $("#to_dt").datepicker("getDate");
+
+                if (end == ""){
+                    var days = 1;
+                }else {
+                    var days = (end - start) / (1000 * 60 * 60 * 24);
+                }
+                
+                $("#nod").val(days);
+                var no_of_day = $("#nod").val(days);
+                var cost_per_day = $('#room_cost').val();
+                $('#amount').val($('#room_cost').val() * days);
+            });
+
+
+            function checkRoom(){
+
+                var selected = $('#room_number_selected').val();
+                if (selected == ""){
+                    alert("please select a valid logde")
+                    return false;
+                }
+            }
+
+    </script>
+   
+</body>
+</html>

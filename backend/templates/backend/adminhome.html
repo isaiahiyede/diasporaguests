@@ -1,0 +1,315 @@
+{% extends 'client/clientindex.html' %}
+
+{% load staticfiles %}
+{% load humanize %}
+
+
+{% block contents %}
+		<div id="wrapper">
+
+            <style>
+                
+                .sticky {
+                    position: fixed;
+                    width: 100%;
+                    left: 0;
+                    top: 0;
+                    z-index: 100;
+                    border-top: 0;
+                }
+            </style>
+
+            <nav class="navbar navbar-default top-navbar sticky" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#" style="font-size: 20px;">Diaspora Suites</a>
+                </div>
+
+                <ul class="nav navbar-top-links navbar-right">
+
+
+                                    
+                    <!-- /.dropdown -->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                            <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+
+                            <li><a href="#"><i class="fa fa-user fa-fw"></i>{{request.user.username}}</a>
+                            </li>
+                           
+                            <li class="divider"></li>
+
+                            {% if request.user.is_authenticated %}
+                                <li><a href="{% url 'general:user_logout' %}"><i class="fa fa-sign-out fa-fw"></i>Logout</a></li>
+                            {% else %}
+                                <li><a href="{% url 'general:login' %}">Login</a></li>
+                            {% endif %} 
+                        </ul>
+                        <!-- /.dropdown-user -->
+                    </li>
+                    <!-- /.dropdown -->
+                </ul>
+            </nav>
+            <!--/. NAV TOP  -->
+            <nav class="navbar-default navbar-side" role="navigation" style="position: fixed;">
+                <div class="sidebar-collapse">
+                    <ul class="nav" id="main-menu">
+
+                        <li>
+                            <a href="#"><i class="fa fa-dashboard"></i> Dashboard</a>
+                        </li>
+                        <li>
+                            <a {% if 'all' in request.path %} class="active-menu" {% endif %} href="{% url 'backend:admin_booking_category' 'all' %}">All Bookings</a>
+                        </li>
+
+                         <li>
+                            <a {% if 'completed' in request.path %} class="active-menu" {% endif %} href="{% url 'backend:admin_booking_category' 'completed' %}">Completed Bookings</a>
+                        </li>
+    					
+                        <li>
+                            <a {% if 'approved' in request.path %} class="active-menu" {% endif %} href="{% url 'backend:admin_booking_category' 'approved' %}">Approved Bookings</a>
+                        </li>
+                        
+                        <li>
+                            <a {% if 'processing' in request.path %} class="active-menu" {% endif %} href="{% url 'backend:admin_booking_category' 'processing' %}">Processing Bookings </a>
+                        </li>
+
+                         <li>
+                            <a {% if 'deleted' in request.path %} class="active-menu" {% endif %} href="{% url 'backend:admin_booking_category' 'deleted' %}">Deleted Bookings</a>
+                        </li>
+
+                        <li>
+                            <a href="#">Message Center</a>
+                        </li>
+
+                        <li>
+                            <a href="#">What's New</a>
+                        </li>
+                    </ul>
+
+                </div>
+
+            </nav>
+            <!-- /. NAV SIDE  -->
+            <div id="page-wrapper">
+                <div id="page-inner">
+
+
+                    <div class="row" style="margin-top: 30px;">
+                        <div class="col-md-12">
+                            <h1 class="page-header">
+                                <small>Admin, {{request.user.username.title}} -- Summary of Bookings/Reservations</small>
+                                <div class="col-sm-3 col-md-4 pull-right">
+							        <form class="navbar-form" role="search" method="POST" action="{% url 'backend:search' %}">
+							        {% csrf_token %}
+							        <div class="input-group">
+							            <input type="text" class="form-control" required placeholder="Search" name="srch-term" id="srch-term">
+							            <div class="input-group-btn">
+							                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+							            </div>
+							        </div>
+							        </form>
+							        </div>
+                            </h1>
+                            <h3>
+
+                                {% for msg in messages %}
+                                    <script>
+                                        function show_alert(){
+                                        var alert = '<p class="text-{{ msg.tags }}">{{ msg }}</p>';
+                                        document.write(alert);
+                                        }
+                                        display = window.setTimeout(show_alert(), 1000);
+                                        window.clearTimeout(display);
+                                    </script>
+                                {% endfor %}
+                            
+                            </h3>
+                        </div>
+                    </div>
+                    <!-- /. ROW  -->
+
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    
+                                </div> 
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Booking Number</th>
+                                                    <th>Room Type</th>
+                                                    <th>Room Number</th>
+                                                    <th>Check in Date</th>
+                                                    <th>Check Out Date</th>
+                                                    <th>No of days</th>
+                                                    <th>Amount (₦)</th>
+                                                    <th>Payment Ref Number/Name</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                {% for reservation in all_bookings %}
+                                                <tr>
+                                                    <td>{{reservation.tracking_number}}</td>
+                                                    <td>{{reservation.room_type }}</td>
+                                                    <td>{{reservation.room_number }}</td>
+                                                    <td>{{reservation.checK_in|naturaltime}}</td>
+                                                    <td>{{reservation.checK_out}}</td>
+                                                    <td>{{reservation.days}}</td>
+                                                    <td>{{reservation.amount_paid|floatformat:2|intcomma}}</td>
+                                                    <td>{{reservation.ref_num}}</td> 
+                                                    <td>{{reservation.status}}</td>
+                                                    <td>
+                                                    	
+
+                                                    	{% if reservation.completed %}
+                                                    		<a href=""><i class="fa fa-thumbs-up"></i></a>&nbsp;
+                                                    		<a href=""><i class="fa fa-check"></i></a>&nbsp;
+                                                    	{% else %}
+                                               				{% if reservation.approved %}
+	                                                    		<a href="{% url 'general:action_taken' 'unapprove' reservation.id %}" onclick="return confirm('Are you sure you want to un-approve this booking?')"><i class="fa fa-check" title="Disapprove"></i></a>&nbsp;
+	                                                    	{% else %}
+	                                                    		<a href="{% url 'general:action_taken' 'approve' reservation.id %}" onclick="return confirm('Are you sure you want to approve  this booking?')"><i class="fa fa-times" title="Approve"></i></a>&nbsp;
+	                                                    	{% endif %}
+                                                    			<a href="{% url 'general:action_taken' 'complete' reservation.id %}" onclick="return confirm('Are you sure you want to mark this booking as completed?')"><i class="fa fa-thumbs-o-down" title="Complete"></i></a>&nbsp;
+                                                    	{% endif %}
+
+                                                    	<a href="{% url 'general:action_taken' 'delete' reservation.id %}" onclick="return confirm('Are you sure you want to delete this booking?')"><i class="fa fa-trash-o" title="Delete"></i></a>
+
+                                                    </td>
+                                                </tr>
+                                               
+                                                {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 col-sm-12 col-xs-12">
+                            <div class="panel panel-primary text-center no-boder bg-color-blue">
+                                <div class="panel-body">
+                                    <i class="fa fa-bar-chart-o fa-5x"></i>
+                                    <h3>{{all_bookings_count}}</h3>
+                                </div>
+                                <div class="panel-footer back-footer-blue">
+                                    All Bookings
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-12 col-xs-12">
+                            <div class="panel panel-primary text-center no-boder bg-color-green">
+                                <div class="panel-body">
+                                    <i class="fa fa-check fa-5x"></i>
+                                    <h3>{{approved_bookings}}</h3>
+                                </div>
+                                <div class="panel-footer back-footer-green">
+                                    Approved Bookings
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-12 col-xs-12">
+                            <div class="panel panel-primary text-center no-boder bg-color-yellow">
+                                <div class="panel-body">
+                                    <i class="fa fa fa-cog fa-5x"></i>
+                                    <h3>{{processing_bookings}}</h3>
+                                </div>
+                                <div class="panel-footer back-footer-yellow">
+                                    Processing Bookings
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-12 col-xs-12">
+                            <div class="panel panel-primary text-center no-boder bg-color-cyan">
+                                <div class="panel-body">
+                                    <i class="fa fa-thumbs-up fa-5x"></i>
+                                    <h3>{{completed_bookings}}</h3>
+                                </div>
+                                <div class="panel-footer back-footer-cyan">
+                                    Completed Bookings
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-12 col-xs-12">
+                            <div class="panel panel-primary text-center no-boder bg-color-red">
+                                <div class="panel-body">
+                                    <i class="fa fa-times fa-5x"></i>
+                                    <h3>{{deleted_bookings}}</h3>
+                                </div>
+                                <div class="panel-footer back-footer-red">
+                                    Deleted Bookings
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-12 col-xs-12">
+                            <div class="panel panel-primary text-center no-boder bg-color-brown">
+                                <div class="panel-body">
+                                    <i class="fa fa-money fa-5x"></i>
+                                    <h3>{{total_payments|default_if_none:"0.00"}}</h3>
+                                </div>
+                                <div class="panel-footer back-footer-brown">
+                                    Total Amount paid (₦)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- /. ROW  -->
+                    <div class="row">
+
+                          <div class="col-md-12">
+                             <div class="panel panel-default">
+
+                                <div class="panel-heading">
+                                    Messages
+                                </div>        
+                                          
+                                <div class="panel-body"> 
+                                    <div class="alert alert-success">
+                                        <strong>Well done!</strong> You successfully created a booking.
+                                    </div>
+                                    <div class="alert alert-info">
+                                        <strong>Heads up!</strong> This alert needs your attention, but it's not super important.
+                                    </div>
+                                    <div class="alert alert-warning">
+                                        <strong>Warning!</strong> Something is wrong with the booking you are attempting to create!!!.
+                                    </div>
+                                    <div class="alert alert-danger">
+                                        <strong>Oh snap!</strong> Something is definitely wrong with the booking.
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>                      
+                    </div>
+                    <!-- /. ROW  -->
+    				<footer><p>All right reserved. Template by: <a href="http://webthemez.com">WebThemez</a></p></footer>
+                </div>
+                <!-- /. PAGE INNER  -->
+            </div>
+            <!-- /. PAGE WRAPPER  -->
+        </div>
+{% endblock contents %}
+
