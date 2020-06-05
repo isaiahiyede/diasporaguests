@@ -1,4 +1,4 @@
-Django==1.8.8
+Django==1.11.29
 packaging==16.8
 pyparsing==2.2.0
 pytz==2017.2
