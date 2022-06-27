@@ -7,5 +7,5 @@ boto==2.34.0
 django-debug-toolbar==1.4
 MySQL-python==1.2.5
 Pillow==2.6.1
-reportlab==3.2.0
+reportlab==3.5.55
 requests==2.11.1
